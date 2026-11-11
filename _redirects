@@ -1,0 +1,20 @@
+# Cloudflare Workers / Netlify style redirects. This file is parsed by the
+# platform and never served as an asset. One rule per line:
+#   [source] [destination] [status]
+# Order matters: the first matching rule for a source wins.
+
+# ── Legacy pages from the previous build → the closest new page (permanent) ──
+/audit                 /services  301
+/audit.html            /services  301
+/acoustic-systems      /services  301
+/acoustic-systems.html /services  301
+/doorstep-service      /services  301
+/doorstep-service.html /services  301
+/faq                   /services  301
+/faq.html              /services  301
+
+# ── .html → clean canonical URL (permanent instead of the router's 307) ──────
+/index.html            /          301
+/services.html         /services  301
+/about.html            /about     301
+/contact.html          /contact   301

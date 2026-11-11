@@ -1,0 +1,144 @@
+/* ============================================================================
+   Wave Car Studio — static build layer
+   ----------------------------------------------------------------------------
+   tailwind.css  = the compiled design system from src/styles.css
+                   (tokens, @theme, typography utilities, tone-paper, motion).
+   site.css      = only the handful of things React components used to do in
+                   JavaScript, expressed as CSS state instead:
+
+                     SiteHeader.tsx    -> .site-header.is-solid, [aria-current]
+                     Reveal.tsx        -> .reveal / .reveal-pending / .is-shown
+                     mobile menu       -> #mobile-nav[data-open="true"]
+
+   Nothing here invents a new visual language: every value is read from the
+   same custom properties the React app uses.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- header --- */
+
+.site-header {
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color 0.5s,
+    border-color 0.5s,
+    backdrop-filter 0.5s;
+}
+
+/* SiteHeader.tsx: `solid = !overlay || scrolled || open` */
+.site-header.is-solid {
+  border-bottom-color: var(--hairline);
+  background-color: color-mix(in oklab, var(--background) 85%, transparent);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+}
+
+/* NavLink used data-[status=active]; static pages use aria-current="page". */
+.nav-link[aria-current="page"] {
+  color: var(--color-primary);
+}
+.nav-link[aria-current="page"] > span {
+  width: 100%;
+}
+
+/* Mobile menu drawer (was a Tailwind class swap in SiteHeader.tsx). */
+#mobile-nav {
+  height: 0;
+  border-color: transparent;
+}
+#mobile-nav[data-open="true"] {
+  height: calc(100dvh - 5rem);
+  border-color: var(--hairline);
+}
+
+/* Hamburger turns into an X. */
+#menu-toggle[aria-expanded="true"] .menu-bar:first-child {
+  transform: rotate(45deg);
+}
+#menu-toggle[aria-expanded="true"] .menu-bar:last-child {
+  transform: rotate(-45deg);
+}
+
+/* ------------------------------------------------------------ brand lockup -- */
+/* "WAVE | CAR STUDIO" — the same lockup the Wave Audio site uses: the wave
+   wordmark, a hairline divider, then the name in letterspaced display caps.
+   Sizes are fluid in the footer so the longer name always fits its column. */
+
+.brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 100%;
+}
+
+.brand-lockup__mark {
+  display: block;
+  flex: none;
+  width: auto;
+  height: 18px;
+}
+
+.brand-lockup__name {
+  border-left: 1px solid color-mix(in oklab, var(--foreground) 30%, transparent);
+  padding-left: 0.75rem;
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--foreground);
+}
+
+@media (min-width: 768px) {
+  .brand-lockup__mark {
+    height: 20px;
+  }
+  .brand-lockup__name {
+    font-size: 0.75rem;
+  }
+}
+
+.brand-lockup--footer .brand-lockup__mark {
+  height: clamp(17px, 2.2vw, 30px);
+}
+
+.brand-lockup--footer .brand-lockup__name {
+  font-size: clamp(0.6rem, 1.1vw, 0.9rem);
+  letter-spacing: 0.28em;
+}
+
+/* ---------------------------------------------------------------- reveal --- */
+
+/* Progressive enhancement: markup is visible by default, and site.js only
+   hides blocks that start below the fold before observing them. */
+.reveal {
+  opacity: 1;
+  transform: none;
+}
+.reveal.reveal-pending {
+  opacity: 0;
+  transform: translateY(24px);
+}
+.reveal.is-shown {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.reveal-pending {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ------------------------------------------------------- calibration panel -- */
+
+/* Bars animate between the factory and calibrated profiles. */
+[data-calibration] [data-factory] {
+  transition: height 0.5s, background-color 0.5s;
+}

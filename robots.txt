@@ -1,0 +1,10 @@
+# robots.txt - https://wavecarstudio.co.in/robots.txt
+# Everything public is crawlable. Only the internal build archive and the
+# local dev server script are excluded.
+
+User-agent: *
+Allow: /
+Disallow: /_archive/
+Disallow: /serve.cjs
+
+Sitemap: https://wavecarstudio.co.in/sitemap.xml
